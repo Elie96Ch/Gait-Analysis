@@ -43,6 +43,13 @@ switch lower(ext)
 end
 
 prep_EMG_data=preprocess_EMG(Channels, Data, Fs,'MV_window_size',100);
-figure;
-plot(prep_EMG_data.values.prep_NM(:,1))
-legend(prep_EMG_data.headers)
+
+% Test
+for k=1:height(prep_EMG_data.headers)
+    figure;
+    for i=1:count_Rcycles
+        plot(prep_EMG_data.values.prep_NM(xsens_processed.contact.Rhs(i):xsens_processed.contact.Rhs(i+1),k))
+        hold on
+    end
+    legend(prep_EMG_data.headers(k,:))
+end
