@@ -93,11 +93,11 @@ tbl_EMG_lc=array2table(All_res_LC,'VariableNames',var_names_EMG);
 
 %%
 drct=uigetdir();
-userInput = inputdlg({'Enter subject name:', 'Enter speed:', 'Enter trial number and brace status:'},...
+userInput = inputdlg({"Enter info#1:", "Enter info#2:", "Enter info #3:"},...
     'Input Variables', [1, 1, 1]);
 
 OutFilename = strcat(drct,'\',...
-    userInput{1},'_',userInput{2},'kmh_',userInput{3},'.xlsx');
+    userInput{1},'_',userInput{2},'_',userInput{3},'.xlsx');
 
 %% Write the table to Excel
 writetable([array2table(joint_names,...
