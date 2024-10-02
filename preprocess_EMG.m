@@ -8,8 +8,8 @@ function EMG_data=preprocess_EMG(Channels, Data, Fs,varargin)
     addRequired(p, 'Fs');
 
     % Optional arguments with default values
-    addOptional(p, 'nF', 60);
-    addOptional(p, 'low_cutoff', 10);
+    addOptional(p, 'nF', 60); % new frequency
+    addOptional(p, 'low_cutoff', 10); 
     addOptional(p, 'high_cutoff', 250);
     addOptional(p, 'MVC', false);
     addOptional(p, 'isMVC', false);
@@ -102,7 +102,7 @@ function EMG_data=preprocess_EMG(Channels, Data, Fs,varargin)
             resampled_NM(:,i)= filtfilt(b_lp, a_lp, resampled_NM(:,i));
             resampled_NP(:,i)= filtfilt(b_lp, a_lp, resampled_NP(:,i));
         end
-    
+
     end
 
     EMG_data.values.prep_NM=resampled_NM;

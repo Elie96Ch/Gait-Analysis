@@ -7,7 +7,7 @@
 % * Revision History  :
 % * Date		Author 			Comments
 % * ------------------------------------------------------------------
-% * -/-/-	<>	<>
+% * 01/09/2024	<Elie>	       <Secondary Functions Updated>
 % ************************************************************************
 %% Load all data
 % Loading Xsens data (Use MVNX format)
@@ -15,8 +15,9 @@
 [filename, ~] =uigetfile({'*.mvnx'},'File Selector','Select Xsens .mvnx file');
 tree = load_mvnx(filename);
 required_angles=["jRightHip","jRightKnee","jRightAnkle","jLeftHip","jLeftKnee","jLeftAnkle"];
-xsens_processed = preprocess_XSENS(tree,'joint_angles',required_angles);
+xsens_preprocessed = preprocess_XSENS(tree,'joint_angles',required_angles,'filter_contacts',true);
 
+%%
 % Loading EMG data (Preferably in .mat, to load it in .xlsx or .csv make sure headers are not incuded in the file)
 
 [filename, pathname] =uigetfile({'*.mat';'*.xlsx';'*.csv'},'File Selector','Select EMG file');
@@ -37,19 +38,36 @@ switch lower(ext)
                 Fs(i)=100/max(Time(i,101));
             end
         case '.csv'
-            disp('CSV file selected');
+            disp('CSV file selected (Not supported)');
         otherwise
             disp('Unknown file format');
 end
 
-prep_EMG_data=preprocess_EMG(Channels, Data, Fs,'MV_window_size',100);
+prep_EMG_data=preprocess_EMG(Channels, Data, Fs,'MVC', true);
+emg_param=get_emg_param(xsens_preprocessed,prep_EMG_data);
 
-% Test
-for k=1:height(prep_EMG_data.headers)
-    figure;
-    for i=1:count_Rcycles
-        plot(prep_EMG_data.values.prep_NM(xsens_processed.contact.Rhs(i):xsens_processed.contact.Rhs(i+1),k))
-        hold on
-    end
-    legend(prep_EMG_data.headers(k,:))
-end
+%%
+% Save results
+directory=uigetdir('Select where to save the figures');
+save(strcat(directory,"/results.mat"),'xsens_preprocessed','prep_EMG_data','emg_param')
+
+%% Plot and Save EMG
+
+plot_and_save(emg_param,'emg','Mean_env','directory',directory,'saving',false)
+plot_and_save(xsens_preprocessed,'xsens','Mean_env','directory',directory,'saving',false)
+%%
+close all
+%% Parameters to prepare
+% from xsens:
+%     ROM
+%     Min
+%     Max
+% Later: Gait parameters (Stride, step width ...)
+
+% from EMG:
+%     RMS(MeanEnvelope)
+%     Peak activation (with mvc?)
+% Later: Co-contraction
+
+
+
