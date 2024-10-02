@@ -8,5 +8,5 @@ The code will prompt you to load a '.mvnx' file (Xsens format) for the motion da
 The code will also ask you to specify the directory in which you would like to save the results.
 # Save to Excel
 If you want to store your results in an excel file please run 'save_to_excel.m' script.
-It will load the '.mat' results file save from the previous code.
+It will load the '.mat' results file saved from the previous code.
 
