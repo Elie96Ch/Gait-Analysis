@@ -1,3 +1,4 @@
+% "Script provided by Movella (Xsens)"
 %Convert mvnx file into a MATLAB structure
 function [mvnx] = load_mvnx(file)
     %check for existence
